@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Install Jenkins — Attractive Step‑by‑Step Guide</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ff7a59;--muted:#94a3b8;--glass:rgba(255,255,255,0.04)}
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#e6eef6;background:linear-gradient(180deg,#071029 0%, #071b2a 60%);}
+    .wrap{max-width:1000px;margin:36px auto;padding:28px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 10px 30px rgba(2,6,23,0.6);backdrop-filter:blur(6px)}
+    header{display:flex;gap:18px;align-items:center}
+    .logo{width:76px;height:76px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#ffd6c2);display:grid;place-items:center;color:#081225;font-weight:700;font-size:22px}
+    h1{margin:0;font-size:26px}
+    p.lead{color:var(--muted);margin-top:6px}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:20px;margin-top:20px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:inset 0 1px rgba(255,255,255,0.02)}
+    .steps{line-height:1.6}
+    pre{background:var(--glass);padding:12px;border-radius:8px;overflow:auto;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px}
+    code{background:transparent}
+    .toc h3{margin:8px 0 12px;color:#cfe8ff}
+    .toc ul{padding:0;margin:0;list-style:none}
+    .toc li{margin:8px 0}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#ffb99a);color:#081225;font-weight:600;text-decoration:none}
+    .copy{float:right;font-size:13px;opacity:0.9}
+    .note{background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:10px;border-radius:8px;color:var(--muted);margin:10px 0}
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+    @media (max-width:980px){.grid{grid-template-columns:1fr;}.toc{order:-1}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">JX</div>
+      <div>
+        <h1>Jenkins — Friendly, attractive, step‑by‑step install guide</h1>
+        <p class="lead">Commands and short explanations for Ubuntu/Debian, CentOS/Fedora, macOS, Windows and Docker. Copy‑buttons are included for convenience.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main class="card">
+        <section>
+          <h2>Quick checklist</h2>
+          <ul class="note">
+            <li>Have sudo/admin access on the machine</li>
+            <li>Install a supported Java (OpenJDK 11 or later recommended)</li>
+            <li>Open port <strong>8080</strong> (or use reverse proxy like Nginx)</li>
+          </ul>
+        </section>
+
+        <section style="margin-top:12px">
+          <h2>Ubuntu / Debian (recommended flow)</h2>
+          <div class="note">This installs Jenkins from the official Jenkins package repository.</div>
+          <div class="steps">
+            <div style="position:relative">
+              <button class="copy btn" data-target="cmd-ubuntu">Copy</button>
+              <pre id="cmd-ubuntu">sudo apt update
+sudo apt install -y openjdk-11-jdk
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo gpg --dearmor -o /usr/share/keyrings/jenkins-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install -y jenkins
+sudo systemctl enable --now jenkins</pre>
+            </div>
+            <p class="note">Then visit <code>http://your_server_ip:8080</code> and follow the unlock & setup wizard.</p>
+          </div>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>RHEL / CentOS / Rocky / Fedora</h2>
+          <div class="note">Uses the rpm/dnf/yum flow with Jenkins repo.</div>
+          <div class="steps">
+            <button class="copy btn" data-target="cmd-centos">Copy</button>
+            <pre id="cmd-centos">sudo dnf install -y java-11-openjdk
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo dnf install -y jenkins
+sudo systemctl enable --now jenkins</pre>
+            <p class="note">Open firewall port 8080 if using firewalld: <code>sudo firewall-cmd --permanent --add-port=8080/tcp && sudo firewall-cmd --reload</code></p>
+          </div>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>macOS (Homebrew) & Docker</h2>
+          <div class="steps">
+            <button class="copy btn" data-target="cmd-macos">Copy</button>
+            <pre id="cmd-macos">brew update
+brew install jenkins-lts
+brew services start jenkins-lts</pre>
+            <p class="note">Or run via Docker (good for isolation):</p>
+            <button class="copy btn" data-target="cmd-docker">Copy</button>
+            <pre id="cmd-docker">docker run -p 8080:8080 -p 50000:50000 --name jenkins-lts jenkins/jenkins:lts</pre>
+          </div>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>Windows (MSI installer)</h2>
+          <div class="note">Download the Windows installer (.msi) from the official Jenkins download page and run it. Use the setup wizard to configure service user and port.</div>
+          <div class="steps">
+            <p>After installer completes, open <code>http://localhost:8080</code> and follow the unlock wizard.</p>
+          </div>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>Post‑install — unlock & finish setup</h2>
+          <div class="note">When you visit Jenkins for the first time it asks for an initial admin password stored on the server.</div>
+          <div class="steps">
+            <button class="copy btn" data-target="cmd-unlock">Copy</button>
+            <pre id="cmd-unlock">sudo cat /var/lib/jenkins/secrets/initialAdminPassword</pre>
+            <p class="note">Paste that value into the web setup wizard, install suggested plugins and create your first admin user.</p>
+          </div>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>Secure Jenkins (recommended)</h2>
+          <ul class="note">
+            <li>Run Jenkins behind Nginx as a reverse proxy with SSL (Let's Encrypt recommended).</li>
+            <li>Disable anonymous access and integrate with LDAP/SSO if needed.</li>
+            <li>Keep Jenkins and plugins updated.</li>
+          </ul>
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>Useful commands</h2>
+          <pre>sudo systemctl status jenkins
+sudo journalctl -u jenkins -f
+sudo apt remove --purge jenkins</pre>
+
+        </section>
+
+        <section style="margin-top:18px">
+          <h2>Troubleshooting tips</h2>
+
+          <ul class="note">
+            <li>If Jenkins doesn't start, check Java version with <code>java -version</code>.</li>
+            <li>Check logs: <code>/var/log/jenkins/jenkins.log</code> or use journalctl.</li>
+            <li>On permission errors, ensure the <code>jenkins</code> user can access required directories.</li>
+          </ul>
+        </section>
+
+        <footer>
+          <small>This single‑file guide is meant for learning and quick setup. For production read the official Jenkins documentation and security guides.</small>
+        </footer>
+      </main>
+
+      <aside class="card toc">
+        <h3>Contents</h3>
+        <ul>
+          <li>Quick checklist</li>
+          <li>Ubuntu / Debian</li>
+          <li>RHEL / CentOS</li>
+          <li>macOS / Docker</li>
+          <li>Windows</li>
+          <li>Post-install</li>
+          <li>Secure Jenkins</li>
+          <li>Troubleshooting</li>
+        </ul>
+
+        <div style="margin-top:14px">
+          <a class="btn" href="#" id="download">Download HTML</a>
+        </div>
+
+        <div style="margin-top:14px;color:var(--muted);font-size:13px">Helpful links:</div>
+        <ul style="color:var(--muted);font-size:13px">
+          <li><a style="color:inherit" href="https://www.jenkins.io" target="_blank">Official Jenkins</a></li>
+          <li><a style="color:inherit" href="https://www.jenkins.io/doc/book/installing/" target="_blank">Install docs</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    function copyText(id){
+      const t=document.getElementById(id).innerText;
+      navigator.clipboard.writeText(t).then(()=>{alert('Copied to clipboard')});
+    }
+    document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',e=>copyText(e.target.dataset.target)));
+    document.getElementById('download').addEventListener('click',function(e){
+      e.preventDefault();
+      const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='jenkins-install-guide.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+
