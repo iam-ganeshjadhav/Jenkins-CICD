@@ -36,26 +36,7 @@ This project sets up a **Jenkins CI/CD environment** on an **AWS EC2 Ubuntu inst
 
 ## 🏗️ Architecture Diagram
 
-```
-+---------------------------+
-|        Developer          |
-| Pushes Code to GitHub Repo|
-+-------------+-------------+
-|
-v
-+---------------------------+
-|         Jenkins           |
-|  Installed on EC2 Ubuntu  |
-|  Pulls code from GitHub   |
-|  Builds & Deploys Website |
-+-------------+-------------+
-|
-v
-+---------------------------+
-|     Web Server (Nginx)    |
-|  Serves Static Website    |
-+---------------------------+
-```
+![Diagram](IMG/1.png)
 
 ## ⚙️ Requirements
 
@@ -149,9 +130,14 @@ Visit: `http://<your-ec2-public-ip>/` to see your **Jenkins Installation Guide W
 - Stylish gradients and responsive design
 - Troubleshooting and security notes
 
+## 🌐 Used Code For the Wesite
+[Website Code ](code.html)
+
+
+
 ## 🖼️ Screenshots
-![Jenkins Dashboard](screenshots/jenkins-dashboard.png)
-![Website Home](screenshots/website-home.png)
+![Jenkins Dashboard](IMG/3.jpg)
+![Website Home](IMG/2.jpg)
 
 ## 🧰 Troubleshooting
 | Issue | Possible Fix |
@@ -177,7 +163,7 @@ Complete Jenkins CI/CD setup on AWS EC2 with automated static website deployment
 ## 👨‍💻 Author
 **Ganesh Jadhav**  
 BCA (Information Technology)  
-📧 [Email Me](mailto:youremail@example.com)  
+📧 [Email Me](jadhavg9370@gmail.com)  
 🌐 [GitHub Profile](https://github.com/iam-ganeshjadhav)
 
 ## 🏷️ License
